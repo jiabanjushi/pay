@@ -169,7 +169,13 @@ func UpdateMoneyForAddressOnce(c *gin.Context) {
 			ups := make(map[string]interface{})
 			ups["Money"] = usd
 			ups["Updated"] = time.Now().Unix()
-			mysql.DB.Model(model.ReceiveAddress{}).Where("id=?", v.ID).Update(ups)
+			err = mysql.DB.Model(model.ReceiveAddress{}).Where("id=?", v.ID).Update(ups).Error
+			if err != nil {
+
+				fmt.Println(err.Error())
+
+			}
+
 		}
 	}()
 
