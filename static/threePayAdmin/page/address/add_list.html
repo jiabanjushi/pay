@@ -77,6 +77,11 @@
                         <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadData" lay-submit style="background-color: #926dde;border-color: #926dde;">
                             <i class="layui-icon layui-icon-refresh"></i>刷新数据
                         </button>
+                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadDataForMoney" lay-submit style="background-color: #926dde;border-color: #926dde;">
+                            <i class="layui-icon layui-icon-refresh"></i>更新余额
+                        </button>
+
+
                     </div>
                 </div>
             </form>
@@ -387,6 +392,40 @@
                 return false;
             });
 
+
+
+            form.on('submit(reloadDataForMoney)', function (data) {
+
+                $.ajax({
+                    url: global_requestAddressJs_updateMoneyForAddressOnce,
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === 200) {
+                            insTb.reload({
+                                where: {...currTempObj}
+                                , page: {curr: 1},
+                                done:function(){
+                                    bet_tb_this = this;
+                                    // console.log("book_tb_this----重载后的值",bet_tb_this)
+                                }
+                            });
+                        } else {
+                            layer.msg("更新失败")
+                        }
+                    },
+                    error: function (data) {
+                        layer.alert(JSON.stringify(data), {
+                            title: data
+                        });
+
+                    }
+
+                });
+
+                return false;
+            });
+
             /* 表格工具条点击事件 */
             table.on('tool(userTable)', function (obj) {
                 var currDatas  = obj.data;
@@ -684,6 +723,15 @@
 
                 return false
             })
+
+
+
+
+
+
+
+
+
 
 
 

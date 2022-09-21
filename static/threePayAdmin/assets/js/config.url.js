@@ -8,7 +8,7 @@ global_requestAddressJs_getPayInformation = global_requestAddress+ "/v2/getPayIn
 global_requestAddressJs_getPrepaidPhoneOrders = global_requestAddress+ "/v2/getPrepaidPhoneOrders";
 
 global_requestAddressJs_getAllMoney = global_requestAddress+ "/v2/getAllMoney";
-
+global_requestAddressJs_updateMoneyForAddressOnce = global_requestAddress+ "/v2/updateMoneyForAddressOnce";
 global_requestAddressJs_getDailyStatistics = global_requestAddress+ "/v2/getDailyStatistics";
 
 global_requestAddressJs_getReceiveAddress = global_requestAddress+ "/v2/getReceiveAddress";
