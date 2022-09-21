@@ -143,4 +143,5 @@ func Setup() *gin.Engine {
 
 	r.Run(fmt.Sprintf(":%d", viper.GetInt("app.port")))
 	return r
+
 }

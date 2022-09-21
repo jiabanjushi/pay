@@ -2,14 +2,12 @@ package V2
 
 import (
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 	"github.com/spf13/viper"
 	"github.com/wangyi/GinTemplate/dao/mysql"
-	token "github.com/wangyi/GinTemplate/eth"
+	"io/ioutil"
+	"regexp"
 
 	//token "github.com/wangyi/GinTemplate/eth"
 	"github.com/wangyi/GinTemplate/model"
@@ -144,39 +142,30 @@ func ToDecimal(ivalue interface{}, decimals int) decimal.Decimal {
 func UpdateMoneyForAddressOnce(c *gin.Context) {
 	re := make([]model.ReceiveAddress, 0)
 	mysql.DB.Find(&re)
-	ethUrl := viper.GetString("eth.ethUrl")
-	client, err := ethclient.Dial(ethUrl)
 	go func() {
 		for _, v := range re {
-			//获取 美元
-			if err != nil {
-				continue
+			url := "https://api.trongrid.io/v1/accounts/" + v.Address
+			req, _ := http.NewRequest("GET", url, nil)
+			req.Header.Add("accept", "application/json")
+			res, _ := http.DefaultClient.Do(req)
+			body, _ := ioutil.ReadAll(res.Body)
+			re := regexp.MustCompile("\"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t\":\"(\\d+)\"")
+			arrayA := re.FindStringSubmatch(string(body))
+			fmt.Println("地址:" + v.Address)
+			if len(arrayA) == 2 {
+				usd := ToDecimal(arrayA[1], 6)
+				//更新数据
+				ups := make(map[string]interface{})
+				ups["Money"] = usd
+				ups["Updated"] = time.Now().Unix()
+				err := mysql.DB.Model(model.ReceiveAddress{}).Where("id=?", v.ID).Update(ups).Error
+				if err != nil {
+					fmt.Println("更新失败")
+				}
 			}
-			tokenAddress := common.HexToAddress("0xdAC17F958D2ee523a2206206994597C13D831ec7") //usDT
-			instance, err := token.NewToken(tokenAddress, client)
-			if err != nil {
-				continue
-			}
-			address := common.HexToAddress(v.Address)
-			fmt.Println(v.Address)
-			bal, err := instance.BalanceOf(&bind.CallOpts{}, address)
-			if err != nil {
-				continue
-			}
-			usd := ToDecimal(bal.String(), 6)
-			fmt.Println(usd)
-			//更新数据
-			ups := make(map[string]interface{})
-			ups["Money"] = usd
-			ups["Updated"] = time.Now().Unix()
-			err = mysql.DB.Model(model.ReceiveAddress{}).Where("id=?", v.ID).Update(ups).Error
-			if err != nil {
-
-				fmt.Println(err.Error())
-
-			}
-
+			time.Sleep(1 * time.Second)
 		}
+		fmt.Println("检查成功!")
 	}()
 
 	tools.ReturnError200(c, "执行成功")

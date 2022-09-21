@@ -10,16 +10,16 @@
 
     <style>
 
-        .currSerachBtn{
+        .currSerachBtn {
             box-shadow: 0 15px 18px -6px rgb(45 140 240 / 65%) !important;
         }
 
-        .currReloadBtn{
+        .currReloadBtn {
             box-shadow: 0 15px 18px -6px rgb(146 109 222 / 65%) !important;
         }
 
-        .layui-table-cell{
-            height:36px;
+        .layui-table-cell {
+            height: 36px;
             line-height: 36px;
         }
 
@@ -55,7 +55,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">余额 >= </label>
                         <div class="layui-input-inline">
-                            <input type="text" id="money"  name="money" autocomplete="off" class="layui-input">
+                            <input type="text" id="money" name="money" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -71,13 +71,16 @@
                         </div>
                     </div>
                     <div class="layui-inline">&emsp;
-                        <button class="layui-btn icon-btn currSerachBtn" lay-filter="userTbSearch" lay-submit style="margin-left: 20px">
+                        <button class="layui-btn icon-btn currSerachBtn" lay-filter="userTbSearch" lay-submit
+                                style="margin-left: 20px">
                             <i class="layui-icon">&#xe615;</i>搜索
                         </button>
-                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadData" lay-submit style="background-color: #926dde;border-color: #926dde;">
+                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadData" lay-submit
+                                style="background-color: #926dde;border-color: #926dde;">
                             <i class="layui-icon layui-icon-refresh"></i>刷新数据
                         </button>
-                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadDataForMoney" lay-submit style="background-color: #926dde;border-color: #926dde;">
+                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadDataForMoney" lay-submit
+                                style="background-color: #926dde;border-color: #926dde;">
                             <i class="layui-icon layui-icon-refresh"></i>更新余额
                         </button>
 
@@ -131,7 +134,8 @@
 
                 <div class="layui-inline">
 
-                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" id="addAddress" lay-event="addAddress"> 添加地址
+                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" id="addAddress"
+                            lay-event="addAddress"> 添加地址
 
                     </button>
 
@@ -146,7 +150,8 @@
                 </div>
 
                 <div class="layui-inline">
-                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" id="updateMoney" lay-event="updateMoney"> 更新余额
+                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" id="updateMoney"
+                            lay-event="updateMoney"> 更新余额
                     </button>
                 </div>
 
@@ -167,7 +172,9 @@
                 </div>
 
                 <div class="layui-inline">
-                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn " lay-event="add" id="showZjgj">资金归集</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn " lay-event="add" id="showZjgj">
+                        资金归集
+                    </button>
                 </div>
 
             </div>
@@ -196,22 +203,22 @@
 <script type="text/html" id="orderListBar">
     <a class="layui-btn layui-btn-xs " lay-event="rechargebtn"><i class="layui-icon">&#xe605;</i>充值</a>
     <a class="layui-btn layui-btn-xs " lay-event="changebtn"><i class="layui-icon">&#xe605;</i>修改</a>
-<!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delbtn"><i class="layui-icon">&#x1006;</i>删除</a>-->
+    <!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delbtn"><i class="layui-icon">&#x1006;</i>删除</a>-->
 </script>
 <script>
 
-    var mybck= $.cookie('tokenMyb');
+    var mybck = $.cookie('tokenMyb');
     //alert(document.cookie);
     //console.log(mybck)
-    if(mybck == "" || mybck == null){
+    if (mybck == "" || mybck == null) {
 
-        window.top.location.href="../../login.html";
+        window.top.location.href = "../../login.html";
 
-    }else{
+    } else {
 
         let currDateVal
         let currDateVal_end
-        layui.use(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','laydate'], function () {
+        layui.use(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'laydate'], function () {
             var $ = layui.jquery;
             var layer = layui.layer;
             var form = layui.form;
@@ -240,14 +247,13 @@
             });
 
 
-
             laydate.render({
                 elem: '#startDate'
                 // ,value: currDate
-                ,isInitValue: true
-                ,theme: 'molv'
-                ,type: 'datetime'
-                ,done: function(value, date){//选中后的回调
+                , isInitValue: true
+                , theme: 'molv'
+                , type: 'datetime'
+                , done: function (value, date) {//选中后的回调
                     // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
                     // console.log("自带的",date)
                     // console.log("jquery",$("#buildDate").val())
@@ -261,10 +267,10 @@
             laydate.render({
                 elem: '#endDate'
                 // ,value: currDate
-                ,isInitValue: true
-                ,theme: 'molv'
-                ,type: 'datetime'
-                ,done: function(value, date){//选中后的回调
+                , isInitValue: true
+                , theme: 'molv'
+                , type: 'datetime'
+                , done: function (value, date) {//选中后的回调
                     // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
                     // console.log("自带的",date)
                     // console.log("jquery",$("#buildDate").val())
@@ -276,19 +282,17 @@
             });
 
 
-
             var log_login_request_param = {};
             // log_login_request_param['player_id']= '1';
-            log_login_request_param['token']= $.cookie('tokenMyb');
-            log_login_request_param['kinds']= 1;
-            log_login_request_param['status']= 4;
-
+            log_login_request_param['token'] = $.cookie('tokenMyb');
+            log_login_request_param['kinds'] = 1;
+            log_login_request_param['status'] = 4;
 
 
             /* 渲染表格 */
             var insTb = table.render({
                 elem: '#userTable',
-                url: global_requestAddressJs_getReceiveAddress+"?action=GET",
+                url: global_requestAddressJs_getReceiveAddress + "?action=GET",
                 // method: 'post',
                 // where:log_login_request_param,
                 // toolbar: ['<p>',
@@ -298,16 +302,16 @@
                 toolbar: true,
                 // defaultToolbar: ['filter'],
                 cellMinWidth: 100,
-                page :  { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
                     //,curr: 5 //设定初始在第 5 页
-                    ,groups: 10 //只显示 1 个连续页码
-                    ,first: "首页" //不显示首页
-                    ,last: "尾页"//不显示尾页
+                    , groups: 10 //只显示 1 个连续页码
+                    , first: "首页" //不显示首页
+                    , last: "尾页"//不显示尾页
                 },
-                height : "full-100",
-                limit : 15,
-                limits : [15,30,50,100],
+                height: "full-100",
+                limit: 15,
+                limits: [15, 30, 50, 100],
                 // id : "systemLog",
                 cols: [[
                     {type: "checkbox", width: 50},
@@ -318,13 +322,13 @@
                     {field: 'ReceiveNums', width: 150, title: '充值次数', sort: true, align: "center"},
                     {field: 'LastGetAccount', width: 150, title: '最后一次充值金额', align: "center"},
                     {
-                        field: 'Created', width: 200, title: '入库时间',align:"center", templet: function (d) {
-                            return util.toDateString(d.Created* 1000);
+                        field: 'Created', width: 200, title: '入库时间', align: "center", templet: function (d) {
+                            return util.toDateString(d.Created * 1000);
                         }, sort: true
                     },
                     {
-                        field: 'Updated', width: 200, title: '更新时间',align:"center", templet: function (d) {
-                            return util.toDateString(d.Updated* 1000);
+                        field: 'Updated', width: 200, title: '更新时间', align: "center", templet: function (d) {
+                            return util.toDateString(d.Updated * 1000);
                         }, sort: true
                     },
                     // {title: '操作', width:250, templet:'#orderListBar',fixed:"right",align:"center"}
@@ -347,30 +351,30 @@
                 let resultObj = data.field
                 // console.log("result",resultObj)
 
-                if(resultObj.money){
+                if (resultObj.money) {
 
                     currTempObj.money = resultObj.money
                 }
 
-                if(resultObj.username){
+                if (resultObj.username) {
                     currTempObj.username = resultObj.username
                 }
 
-                if(resultObj.address){
+                if (resultObj.address) {
                     currTempObj.address = resultObj.address
                 }
 
 
-                if(resultObj.startDate && resultObj.endDate){
+                if (resultObj.startDate && resultObj.endDate) {
                     currTempObj.start_time = get_unix_time(resultObj.startDate)
                     currTempObj.end_time = get_unix_time(resultObj.endDate)
-                }else if(!resultObj.startDate && resultObj.endDate){
+                } else if (!resultObj.startDate && resultObj.endDate) {
                     currTempObj.start_time = 0
                     currTempObj.end_time = get_unix_time(resultObj.endDate)
                     // console.log("getDateFromString",get_unix_time(resultObj.endDate))
-                }else if(resultObj.startDate && !resultObj.endDate){
+                } else if (resultObj.startDate && !resultObj.endDate) {
                     currTempObj.start_time = get_unix_time(resultObj.startDate)
-                    currTempObj.end_time = parseInt(Date.now()/1000)
+                    currTempObj.end_time = parseInt(Date.now() / 1000)
                 }
 
 
@@ -383,7 +387,7 @@
                 insTb.reload({
                     where: {...currTempObj}
                     , page: {curr: 1},
-                    done:function(){
+                    done: function () {
                         bet_tb_this = this;
                         // console.log("book_tb_this----重载后的值",bet_tb_this)
                     }
@@ -391,7 +395,6 @@
 
                 return false;
             });
-
 
 
             form.on('submit(reloadDataForMoney)', function (data) {
@@ -402,12 +405,15 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.code === 200) {
+
+                            layer.msg("执行成功!")
                             insTb.reload({
                                 where: {...currTempObj}
                                 , page: {curr: 1},
-                                done:function(){
+                                done: function () {
                                     bet_tb_this = this;
                                     // console.log("book_tb_this----重载后的值",bet_tb_this)
+
                                 }
                             });
                         } else {
@@ -428,24 +434,27 @@
 
             /* 表格工具条点击事件 */
             table.on('tool(userTable)', function (obj) {
-                var currDatas  = obj.data;
+                var currDatas = obj.data;
                 if (obj.event === 'changebtn') { // 修改
                     // showEditModel(obj.data);
-                    layer.prompt({title: '系统将对该用户进行封禁操作,确定当前用户进行封禁状态吗?', formType:2}, function(text, index){
-                        var param={};
-                        param['token']= $.cookie('tokenMyb');
-                        param['status']= '2';
-                        param['remark']= text;
-                        param['id']= currDatas.id;
+                    layer.prompt({
+                        title: '系统将对该用户进行封禁操作,确定当前用户进行封禁状态吗?',
+                        formType: 2
+                    }, function (text, index) {
+                        var param = {};
+                        param['token'] = $.cookie('tokenMyb');
+                        param['status'] = '2';
+                        param['remark'] = text;
+                        param['id'] = currDatas.id;
 
                         // param = wxgl_tgsh_btgbtn_jinyongbtn_Request($.cookie('tokenMyb'),'2',text,currDatas.wx_number,currDatas.id);
                         $.post(js_global_requestAddress_change_players_status, param,
-                            function(lookResult){
-                                if(lookResult.code === 200 ){
+                            function (lookResult) {
+                                if (lookResult.code === 200) {
                                     layer.msg(lookResult.msg);
                                     insTb.reload();
                                     layer.close(index);
-                                }else{
+                                } else {
 
 
                                 }
@@ -632,15 +641,15 @@
                             layer.alert("归集成功,请5分钟后在查看!")
                             $('#showZjgj').css("background-color", "#FBFBFB");
                             $('#showZjgj').css("color", "#930e0e");
-                            $('#showZjgj').attr("disabled",true);
-                            var timer = setInterval(()=>{
+                            $('#showZjgj').attr("disabled", true);
+                            var timer = setInterval(() => {
                                 if (timeNum === 0) {
                                     clearInterval(timer);
                                     let showText = '资金归集';
                                     $('#showZjgj').css("background-color", "#43AEFE");
                                     $('#showZjgj').css("color", "#FFFFFF");
                                     $('#showZjgj').text(showText)
-                                    $('#showZjgj').attr("disabled",false);
+                                    $('#showZjgj').attr("disabled", false);
                                     timeNum = 10;
                                 } else {
                                     let showText = '资金归集剩余' + timeNum + '秒可进行操作';
@@ -666,7 +675,7 @@
             $("#addAddress").click(function () {
 
                 $.ajax({
-                    url: global_requestAddressJs_getReceiveAddress+"?action=ADD",
+                    url: global_requestAddressJs_getReceiveAddress + "?action=ADD",
                     type: "get",
                     dataType: "json",
                     success: function (data) {
@@ -677,7 +686,7 @@
                         insTb.reload({
                             // where: {...currTempObj} ,
                             page: {curr: 1},
-                            done:function(){
+                            done: function () {
                                 // bet_tb_this = this;
                                 // console.log("book_tb_this----重载后的值",bet_tb_this)
                             }
@@ -725,20 +734,9 @@
             })
 
 
-
-
-
-
-
-
-
-
-
-
         });
 
     }
-
 
 
 </script>
