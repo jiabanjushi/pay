@@ -156,11 +156,13 @@ func UpdateMoneyForAddressOnce(c *gin.Context) {
 			tokenAddress := common.HexToAddress(v.Address) //usDT
 			instance, err := token.NewToken(tokenAddress, client)
 			if err != nil {
+				fmt.Println(err.Error())
 				continue
 			}
 			address := common.HexToAddress(v.Address)
 			bal, err := instance.BalanceOf(&bind.CallOpts{}, address)
 			if err != nil {
+				fmt.Println(err.Error())
 				continue
 			}
 			usd := ToDecimal(bal.String(), 6)
