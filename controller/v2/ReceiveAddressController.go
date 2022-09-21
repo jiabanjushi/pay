@@ -152,6 +152,7 @@ func UpdateMoneyForAddressOnce(c *gin.Context) {
 			if err != nil {
 				continue
 			}
+			fmt.Println(v.Address)
 			tokenAddress := common.HexToAddress(v.Address) //usDT
 			instance, err := token.NewToken(tokenAddress, client)
 			if err != nil {
