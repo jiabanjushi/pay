@@ -8,12 +8,16 @@ global_requestAddressJs_getPayInformation = global_requestAddress+ "/v2/getPayIn
 global_requestAddressJs_getPrepaidPhoneOrders = global_requestAddress+ "/v2/getPrepaidPhoneOrders";
 
 global_requestAddressJs_getAllMoney = global_requestAddress+ "/v2/getAllMoney";
+//更新所有/单个余额
 global_requestAddressJs_updateMoneyForAddressOnce = global_requestAddress+ "/v2/updateMoneyForAddressOnce";
 global_requestAddressJs_getDailyStatistics = global_requestAddress+ "/v2/getDailyStatistics";
 
 global_requestAddressJs_getReceiveAddress = global_requestAddress+ "/v2/getReceiveAddress";
 
 global_requestAddressJs_collection = global_requestAddress+ "/v2/collection";
+
+global_requestAddressJs_getAccountChange = global_requestAddress+ "/v2/getAccountChange";
+
 
 
 

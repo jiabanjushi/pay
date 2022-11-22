@@ -17,11 +17,11 @@ func GetAccountChange(c *gin.Context) {
 		role := make([]model.AccountChange, 0)
 		Db := mysql.DB
 		var total int
-		//用户余额变动
+		//用户余额变动  receive_address_name
 		if Rn, isE := c.GetQuery("receive_address_name"); isE == true {
-			Db.Where("receive_address_name=?", Rn)
+			Db = Db.Where("receive_address_name=?", Rn)
 		}
-		Db.Table("account_change").Count(&total)
+		Db.Table("account_changes").Count(&total)
 		Db = Db.Model(&model.AccountChange{}).Offset((page - 1) * limit).Limit(limit).Order("created desc")
 		err := Db.Find(&role).Error
 		if err != nil {

@@ -39,44 +39,44 @@
             <!-- 表格工具栏 -->
             <form class="layui-form toolbar">
                 <div class="layui-form-item" style="margin-left: -40px">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">充值地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="From"  name="From" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">收账地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="ToAddress" name="ToAddress" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">用户名</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="UserID" name="UserID" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">开始时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="startDate" name="startDate" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">结束时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="endDate" name="endDate" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">&emsp;
-                        <button class="layui-btn icon-btn currSerachBtn" lay-filter="userTbSearch" lay-submit>
-                            <i class="layui-icon">&#xe615;</i>搜索
-                        </button>
-                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadData" lay-submit style="background-color: #926dde;border-color: #926dde;">
-                            <i class="layui-icon layui-icon-refresh"></i>刷新数据
-                        </button>
-                    </div>
+                    <!--                    <div class="layui-inline">-->
+                    <!--                        <label class="layui-form-label">充值地址</label>-->
+                    <!--                        <div class="layui-input-inline">-->
+                    <!--                            <input type="text" id="From"  name="From" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="layui-inline">-->
+                    <!--                        <label class="layui-form-label">收账地址</label>-->
+                    <!--                        <div class="layui-input-inline">-->
+                    <!--                            <input type="text" id="ToAddress" name="ToAddress" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="layui-inline">-->
+                    <!--                        <label class="layui-form-label">用户名</label>-->
+                    <!--                        <div class="layui-input-inline">-->
+                    <!--                            <input type="text" id="UserID" name="UserID" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="layui-inline">-->
+                    <!--                        <label class="layui-form-label">开始时间</label>-->
+                    <!--                        <div class="layui-input-inline">-->
+                    <!--                            <input type="text" id="startDate" name="startDate" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="layui-inline">-->
+                    <!--                        <label class="layui-form-label">结束时间</label>-->
+                    <!--                        <div class="layui-input-inline">-->
+                    <!--                            <input type="text" id="endDate" name="endDate" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="layui-inline">&emsp;-->
+                    <!--                        <button class="layui-btn icon-btn currSerachBtn" lay-filter="userTbSearch" lay-submit style="margin-left: 20px">-->
+                    <!--                            <i class="layui-icon">&#xe615;</i>搜索-->
+                    <!--                        </button>-->
+                    <!--                        <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadData" lay-submit style="background-color: #926dde;border-color: #926dde;">-->
+                    <!--                            <i class="layui-icon layui-icon-refresh"></i>刷新数据-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
                 </div>
             </form>
             <!-- 数据表格 -->
@@ -98,7 +98,7 @@
 <script type="text/html" id="orderListBar">
     <a class="layui-btn layui-btn-xs " lay-event="rechargebtn"><i class="layui-icon">&#xe605;</i>充值</a>
     <a class="layui-btn layui-btn-xs " lay-event="changebtn"><i class="layui-icon">&#xe605;</i>修改</a>
-<!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delbtn"><i class="layui-icon">&#x1006;</i>删除</a>-->
+    <!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delbtn"><i class="layui-icon">&#x1006;</i>删除</a>-->
 </script>
 <script>
 
@@ -110,7 +110,7 @@
         window.top.location.href="../../login.html";
 
     }else{
-
+        var currParentDatas = eval('(' + parent.jsondata + ')')
         let currDateVal
         let currDateVal_end
         layui.use(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','laydate'], function () {
@@ -124,61 +124,59 @@
             var xmSelect = layui.xmSelect;
 
 
-            laydate.render({
-                elem: '#startDate'
-                // ,value: currDate
-                ,isInitValue: true
-                ,theme: 'molv'
-                ,type: 'datetime'
-                ,done: function(value, date){//选中后的回调
-                    // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
-                    // console.log("自带的",date)
-                    // console.log("jquery",$("#buildDate").val())
-                    currDateVal = ""
-                    currDateVal = value
-                    // let currStart = date.year+"-"+date.month+"-"+date.date+" 00:00:00"
-                    // $("#startDate").val(currStart)
-                }
-            });
-
-            laydate.render({
-                elem: '#endDate'
-                // ,value: currDate
-                ,isInitValue: true
-                ,theme: 'molv'
-                ,type: 'datetime'
-                ,done: function(value, date){//选中后的回调
-                    // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
-                    // console.log("自带的",date)
-                    // console.log("jquery",$("#buildDate").val())
-                    currDateVal_end = ""
-                    currDateVal_end = value
-                    // let currEnd= date.year+"-"+date.month+"-"+date.date+" 23:59:59"
-                    // $("#endDate").val(currEnd)
-                }
-            });
+            // laydate.render({
+            //     elem: '#startDate'
+            //     // ,value: currDate
+            //     ,isInitValue: true
+            //     ,theme: 'molv'
+            //     ,type: 'datetime'
+            //     ,done: function(value, date){//选中后的回调
+            //         // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
+            //         // console.log("自带的",date)
+            //         // console.log("jquery",$("#buildDate").val())
+            //         currDateVal = ""
+            //         currDateVal = value
+            //         // let currStart = date.year+"-"+date.month+"-"+date.date+" 00:00:00"
+            //         // $("#startDate").val(currStart)
+            //     }
+            // });
+            //
+            // laydate.render({
+            //     elem: '#endDate'
+            //     // ,value: currDate
+            //     ,isInitValue: true
+            //     ,theme: 'molv'
+            //     ,type: 'datetime'
+            //     ,done: function(value, date){//选中后的回调
+            //         // layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
+            //         // console.log("自带的",date)
+            //         // console.log("jquery",$("#buildDate").val())
+            //         currDateVal_end = ""
+            //         currDateVal_end = value
+            //         // let currEnd= date.year+"-"+date.month+"-"+date.date+" 23:59:59"
+            //         // $("#endDate").val(currEnd)
+            //     }
+            // });
 
 
 
             var log_login_request_param = {};
             // log_login_request_param['player_id']= '1';
             log_login_request_param['token']= $.cookie('tokenMyb');
-            log_login_request_param['kinds']= 1;
-            log_login_request_param['status']= 4;
-
+            // log_login_request_param['receive_address_name']= currParentDatas.Username;
+            // log_login_request_param['status']= 4;
 
 
             /* 渲染表格 */
             var insTb = table.render({
                 elem: '#userTable',
-                url: global_requestAddressJs_getPayInformation+"?action=GET",
+                url: global_requestAddressJs_getAccountChange+"?action=GET&receive_address_name="+currParentDatas.Username,
                 // method: 'post',
                 // where:log_login_request_param,
                 // toolbar: ['<p>',
                 //     '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
                 //     '<button lay-event="del" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe640;</i>删除</button>',
                 //     '</p>'].join(''),
-                toolbar: true,
                 cellMinWidth: 100,
                 page :  { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -194,23 +192,31 @@
                 cols: [[
                     {type: "checkbox", width: 50},
                     {field: 'ID', width: 80, title: 'ID', sort: true},
-                    {field: 'TxHash', width: 300, title: '交易Hash', align: "center", sort: true},
-                    {field: 'BlockNumber', width: 100, title: '区块号', sort: true, align: "center"},
-                    {field: 'Amount', width: 100, title: '充值金额', align: "center", sort: true},
-                    {field: 'FromAddress', title: '充值地址', minWidth: 150, align: "center", sort: true},
-                    {field: 'ToAddress', width: 150, title: '收账地址', sort: true, align: "center"},
-                    {field: 'Token', width: 100, title: '充值类型', sort: true, align: "center"},
-                    {field: 'UserID', width: 100, title: '用户ID', align: "center", sort: true},
+                    {field: 'OriginalAmount', title: '原始金额', align: "center"},
+                    {field: 'ChangeAmount',  title: '变动金额', align: "center"},
+                    {field: 'NowAmount', title: '当前金额',align: "center"},
                     {
-                        field: 'Timestamp', width: 200, title: '区块时间', sort: true, align: "center", templet: function (d) {
-                            return util.toDateString(d.Timestamp* 1000);
-                        }, sort: true
+                        field: 'Kinds', width: 100, title: '变化类型', align: "center", templet: function (d) {
+                            var state = "";
+
+                            if (d.Kinds == "1") {//1更新余额
+                                state = '<button class="layui-btn layui-btn-xs" style="background-color: #FF5722">' + '更新余额' + '</button>';
+                            } else if (d.Kinds == "2") {//2玩家充值
+                                state = '<button class="layui-btn layui-btn-xs" >' + '玩家充值' + '</button>';
+                            } else {
+                                state = '<button class="layui-btn layui-btn-xs"  style="background-color: #282626" >' + '已失效' + '</button>';
+                            }
+                            return state;
+                        }
+
                     },
                     {
-                        field: 'Created', width: 200, title: '入库时间',align:"center", templet: function (d) {
+                        field: 'Created', width: 200, title: '创建时间',align:"center", templet: function (d) {
                             return util.toDateString(d.Created* 1000);
                         }, sort: true
                     },
+                    {field: 'ReceiveAddressName', title: '用户名',align: "center"},
+
                     // {
                     //     field: 'updated_at', title: '更新时间',align:"center", templet: function (d) {
                     //         return util.toDateString(d.updated_at* 1000);
@@ -234,7 +240,7 @@
 
 
                 let resultObj = data.field
-                console.log("result",resultObj)
+                // console.log("result",resultObj)
 
                 if(resultObj.From){
 

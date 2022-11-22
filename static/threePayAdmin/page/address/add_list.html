@@ -81,9 +81,10 @@
                         </button>
                         <button class="layui-btn icon-btn currReloadBtn" lay-filter="reloadDataForMoney" lay-submit
                                 style="background-color: #926dde;border-color: #926dde;">
-                            <i class="layui-icon layui-icon-refresh"></i>更新余额
+                            <i class="layui-icon layui-icon-refresh"></i>更新所有余额
                         </button>
-
+                        <button class="layui-btn icon-btn currReloadBtn" id="updateSingleMoney" lay-submit style="background-color: #926dde;border-color: #926dde;"> 更新单个余额
+                        </button>
 
                     </div>
                 </div>
@@ -201,8 +202,9 @@
 
 <!--数据表格操作工具栏-->
 <script type="text/html" id="orderListBar">
-    <a class="layui-btn layui-btn-xs " lay-event="rechargebtn"><i class="layui-icon">&#xe605;</i>充值</a>
-    <a class="layui-btn layui-btn-xs " lay-event="changebtn"><i class="layui-icon">&#xe605;</i>修改</a>
+    <a class="layui-btn layui-btn-sm " lay-event="accountChangebtn"><i class="layui-icon layui-icon-gift"></i>账变</a>
+<!--    <a class="layui-btn layui-btn-xs " lay-event="rechargebtn"><i class="layui-icon">&#xe605;</i>充值</a>-->
+<!--    <a class="layui-btn layui-btn-xs " lay-event="changebtn"><i class="layui-icon">&#xe605;</i>修改</a>-->
     <!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delbtn"><i class="layui-icon">&#x1006;</i>删除</a>-->
 </script>
 <script>
@@ -215,7 +217,7 @@
         window.top.location.href = "../../login.html";
 
     } else {
-
+        var jsondata
         let currDateVal
         let currDateVal_end
         layui.use(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'laydate'], function () {
@@ -331,7 +333,7 @@
                             return util.toDateString(d.Updated * 1000);
                         }, sort: true
                     },
-                    // {title: '操作', width:250, templet:'#orderListBar',fixed:"right",align:"center"}
+                    {title: '操作', width:130, templet:'#orderListBar',fixed:"right",align:"center"}
                 ]],
                 done: function (res, curr, count) {
                     $('tr').css({'background-color': '#fff', 'color': '#191a1c'});
@@ -405,8 +407,8 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.code === 200) {
-
-                            layer.msg("执行成功!")
+                            layer.msg("执行成功!",{icon:1})
+                            // layer.msg("执行成功!")
                             insTb.reload({
                                 where: {...currTempObj}
                                 , page: {curr: 1},
@@ -417,7 +419,8 @@
                                 }
                             });
                         } else {
-                            layer.msg("更新失败")
+                            // layer.msg("更新失败")
+                            layer.msg("更新失败!",{icon:2})
                         }
                     },
                     error: function (data) {
@@ -432,39 +435,68 @@
                 return false;
             });
 
+
+            //更新单个余额
+            $("#updateSingleMoney").click(function () {
+
+                if(!$("#address").val()){
+                    layer.msg("地址不能为空!",{icon:2})
+                    return  false
+                }
+
+                $.ajax({
+                    url: global_requestAddressJs_updateMoneyForAddressOnce+"?address="+$("#address").val(),
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === 200) {
+                            layer.msg(data.msg,{icon:1})
+                            insTb.reload({page: {curr: 1}});
+                        } else {
+                            layer.msg("更新失败",{icon:2})
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+
+                });
+                return false
+            })
+
+
+
+
             /* 表格工具条点击事件 */
             table.on('tool(userTable)', function (obj) {
                 var currDatas = obj.data;
-                if (obj.event === 'changebtn') { // 修改
-                    // showEditModel(obj.data);
-                    layer.prompt({
-                        title: '系统将对该用户进行封禁操作,确定当前用户进行封禁状态吗?',
-                        formType: 2
-                    }, function (text, index) {
-                        var param = {};
-                        param['token'] = $.cookie('tokenMyb');
-                        param['status'] = '2';
-                        param['remark'] = text;
-                        param['id'] = currDatas.id;
+                if (obj.event === 'accountChangebtn') { // 修改
+                    jsondata = JSON.stringify(currDatas)
+                    var index = layui.layer.open({
+                        area: ['1200px', '500px'],
+                        fixed: false, //不固定
+                        maxmin: false,
+                        title: "当前会员账变记录列表",
+                        skin: 'layui-layer-rim',//加上边框
+                        type: 2,
+                        content: "change.html",
+                        success: function (layero, index) {
+                            // var body = layui.layer.getChildFrame('body', index);
 
-                        // param = wxgl_tgsh_btgbtn_jinyongbtn_Request($.cookie('tokenMyb'),'2',text,currDatas.wx_number,currDatas.id);
-                        $.post(js_global_requestAddress_change_players_status, param,
-                            function (lookResult) {
-                                if (lookResult.code === 200) {
-                                    layer.msg(lookResult.msg);
-                                    insTb.reload();
-                                    layer.close(index);
-                                } else {
+                        },
+                        end: function () {//弹窗关闭后的回调函数
+                            //利用laypage实现局部刷新,以下两种方式都可以
+                            // $(".layui-laypage-btn").click()
+                            //直接刷新当前修改的行
+                            // $(".layui-laypage-btn")[0].click()
 
-
-                                }
-
-
-                            });
-
-
-                    });
-
+                        }
+                    })
+                    window.sessionStorage.setItem("index", index);
+                    //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+                    $(window).on("resize", function () {
+                        layui.layer.full(window.sessionStorage.getItem("index"));
+                    })
                 } else if (obj.event === 'del') { // 删除
                     doDel(obj);
                 } else if (obj.event === 'rechargebtn') { // 充值
