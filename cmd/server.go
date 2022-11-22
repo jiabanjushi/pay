@@ -14,6 +14,7 @@ import (
 	"github.com/wangyi/GinTemplate/dao/mysql"
 	"github.com/wangyi/GinTemplate/dao/redis"
 	"github.com/wangyi/GinTemplate/logger"
+	"github.com/wangyi/GinTemplate/model"
 	"github.com/wangyi/GinTemplate/router"
 	"github.com/wangyi/GinTemplate/setting"
 	"github.com/wangyi/GinTemplate/tools"
@@ -22,6 +23,9 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
+	"strings"
 )
 
 var (
@@ -83,7 +87,7 @@ func run(cmd *cobra.Command, args []string) {
 		return
 	}
 	defer redis.Close()
-
+	go model.CheckTx(mysql.DB)
 	router.Setup()
 }
 
@@ -104,6 +108,24 @@ func initDir() {
 
 //初始化守护进程
 func initDaemon() {
+
+	//启动进程之前要先杀死之前的金额
+	pid, err := ioutil.ReadFile("Project.sock")
+	if err != nil {
+		return
+	}
+	pidSlice := strings.Split(string(pid), ",")
+	var command *exec.Cmd
+	for _, pid := range pidSlice {
+		if runtime.GOOS == "windows" {
+			command = exec.Command("taskkill.exe", "/f", "/pid", pid)
+		} else {
+			fmt.Println("成功结束进程:", pid)
+			command = exec.Command("kill", pid)
+		}
+		command.Start()
+	}
+
 	if daemon == true {
 		d := xdaemon.NewDaemon(common.LogDirPath + "MgHash.log")
 		d.MaxError = 10

@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// GetDailyStatistics 获取每日统计
 func GetDailyStatistics(c *gin.Context) {
 	action := c.Query("action")
 	if action == "GET" {

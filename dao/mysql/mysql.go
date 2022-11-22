@@ -45,6 +45,7 @@ func Init() error {
 	model.CheckIsExistModeReceiveAddress(DB)
 	model.CheckIsExistModeDailyStatistics(DB)
 	model.CheckIsExistModeAdmin(DB)
+	model.CheckIsExistModeAccountChange(DB)
 	////////////////////////////////////////////////////////////////////////模型初始化
 	return err
 }

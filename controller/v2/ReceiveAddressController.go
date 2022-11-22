@@ -1,13 +1,14 @@
 package V2
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 	"github.com/spf13/viper"
 	"github.com/wangyi/GinTemplate/dao/mysql"
 	"io/ioutil"
-	"regexp"
+	"math"
 
 	//token "github.com/wangyi/GinTemplate/eth"
 	"github.com/wangyi/GinTemplate/model"
@@ -141,28 +142,84 @@ func ToDecimal(ivalue interface{}, decimals int) decimal.Decimal {
 // UpdateMoneyForAddressOnce 更新地址余额
 func UpdateMoneyForAddressOnce(c *gin.Context) {
 	re := make([]model.ReceiveAddress, 0)
-	mysql.DB.Find(&re)
+	if Address, isE := c.GetQuery("address"); isE == true {
+		tools.ReturnError200(c, "执行成功")
+		one := model.ReceiveAddress{}
+		mysql.DB.Where("address=?", Address).First(&one)
+		re = append(re, one)
+		return
+	} else {
+		mysql.DB.Find(&re)
+	}
 	go func() {
 		for _, v := range re {
-			url := "https://api.trongrid.io/v1/accounts/" + v.Address
+			//v.Address = "TSs1bE2PaNahbMqi9yctTZ6wZ7d2Fbzm8N"
+			//url := "https://api.trongrid.io/v1/accounts/" + v.Address
+			//req, _ := http.NewRequest("GET", url, nil)
+			//req.Header.Add("accept", "application/json")
+			//res, _ := http.DefaultClient.Do(req)
+			//body, _ := ioutil.ReadAll(res.Body)
+			//re := regexp.MustCompile("\"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t\":\"(\\d+)\"")
+			//arrayA := re.FindStringSubmatch(string(body))
+			url := "https://apilist.tronscanapi.com/api/account/token_asset_overview?address=" + v.Address
 			req, _ := http.NewRequest("GET", url, nil)
 			req.Header.Add("accept", "application/json")
 			res, _ := http.DefaultClient.Do(req)
 			body, _ := ioutil.ReadAll(res.Body)
-			re := regexp.MustCompile("\"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t\":\"(\\d+)\"")
-			arrayA := re.FindStringSubmatch(string(body))
-			fmt.Println("地址:" + v.Address)
-			if len(arrayA) == 2 {
-				usd := ToDecimal(arrayA[1], 6)
-				//更新数据
-				ups := make(map[string]interface{})
-				ups["Money"] = usd
-				ups["Updated"] = time.Now().Unix()
-				err := mysql.DB.Model(model.ReceiveAddress{}).Where("id=?", v.ID).Update(ups).Error
-				if err != nil {
-					fmt.Println("更新失败")
-				}
+			//fmt.Println(res)
+			//fmt.Println(string(body))
+			type Ta struct {
+				TotalAssetInTrx float64 `json:"totalAssetInTrx"`
+				Data            []struct {
+					TokenId         string  `json:"tokenId"`
+					TokenName       string  `json:"tokenName"`
+					TokenAbbr       string  `json:"tokenAbbr"`
+					TokenDecimal    int     `json:"tokenDecimal"`
+					TokenCanShow    int     `json:"tokenCanShow"`
+					TokenType       string  `json:"tokenType"`
+					TokenLogo       string  `json:"tokenLogo"`
+					Vip             bool    `json:"vip"`
+					Balance         string  `json:"balance"`
+					TokenPriceInTrx float64 `json:"tokenPriceInTrx"`
+					TokenPriceInUsd float64 `json:"tokenPriceInUsd"`
+					AssetInTrx      float64 `json:"assetInTrx"`
+					AssetInUsd      float64 `json:"assetInUsd"`
+					Percent         float64 `json:"percent"`
+				} `json:"data"`
+				TotalAssetInUsd float64 `json:"totalAssetInUsd"`
 			}
+			var tt1 Ta
+			err := json.Unmarshal(body, &tt1)
+			if err != nil {
+				return
+			}
+			//fmt.Println(string(body))
+			//fmt.Println("地址:" + v.Address)
+
+			if len(tt1.Data) < 1 {
+				continue
+			}
+
+			//fmt.Printf("余额:%f", tt1.Data[0].AssetInUsd)
+
+			//usd := ToDecimal(arrayA[1], 6)
+			////更新数据
+			ups := make(map[string]interface{})
+			ups["Money"] = tt1.Data[0].AssetInUsd
+			ups["Updated"] = time.Now().Unix()
+			err = mysql.DB.Model(model.ReceiveAddress{}).Where("id=?", v.ID).Update(ups).Error
+
+			//调动 余额变动
+			if math.Abs(tt1.Data[0].AssetInUsd-v.Money) > 1 {
+				change := model.AccountChange{ChangeAmount: math.Abs(tt1.Data[0].AssetInUsd - v.Money), Kinds: 1, OriginalAmount: v.Money, NowAmount: tt1.Data[0].AssetInUsd, ReceiveAddressName: v.Username}
+				change.Add(mysql.DB)
+
+			}
+
+			if err != nil {
+				fmt.Println("更新失败")
+			}
+
 			time.Sleep(1 * time.Second)
 		}
 		fmt.Println("检查成功!")

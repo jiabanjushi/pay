@@ -17,8 +17,8 @@ log:
 mysql:
   host: "127.0.0.1"
   port: "3306"
-  user: "paymentPlatform"
-  password: "JBD7KNBnJaB7E8HY"
+  user: "root"
+  password: "root"
   dbname: "paymentplatform"
 
 
