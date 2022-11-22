@@ -147,20 +147,13 @@ func UpdateMoneyForAddressOnce(c *gin.Context) {
 		one := model.ReceiveAddress{}
 		mysql.DB.Where("address=?", Address).First(&one)
 		re = append(re, one)
-		return
 	} else {
 		mysql.DB.Find(&re)
 	}
+
+	fmt.Println(re)
 	go func() {
 		for _, v := range re {
-			//v.Address = "TSs1bE2PaNahbMqi9yctTZ6wZ7d2Fbzm8N"
-			//url := "https://api.trongrid.io/v1/accounts/" + v.Address
-			//req, _ := http.NewRequest("GET", url, nil)
-			//req.Header.Add("accept", "application/json")
-			//res, _ := http.DefaultClient.Do(req)
-			//body, _ := ioutil.ReadAll(res.Body)
-			//re := regexp.MustCompile("\"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t\":\"(\\d+)\"")
-			//arrayA := re.FindStringSubmatch(string(body))
 			url := "https://apilist.tronscanapi.com/api/account/token_asset_overview?address=" + v.Address
 			req, _ := http.NewRequest("GET", url, nil)
 			req.Header.Add("accept", "application/json")

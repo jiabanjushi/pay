@@ -146,7 +146,7 @@ func CheckTx(db *gorm.DB) {
 			res, _ := http.DefaultClient.Do(req)
 			body, _ := ioutil.ReadAll(res.Body)
 			//fmt.Println(res)
-			fmt.Println(string(body))
+			//fmt.Println(string(body))
 			var tt1 Ta
 			err := json.Unmarshal(body, &tt1)
 			if err != nil {
@@ -154,7 +154,7 @@ func CheckTx(db *gorm.DB) {
 			}
 			if len(tt1.TokenTransfers) > 0 {
 				for _, transfer := range tt1.TokenTransfers {
-					fmt.Println(transfer.TransactionId)
+					//fmt.Println(transfer.TransactionId)
 					//判断这个  tx  是否存在
 					err := db.Where("tx_hash=?", transfer.TransactionId).First(&PayOrder{}).Error
 					if err != nil {
